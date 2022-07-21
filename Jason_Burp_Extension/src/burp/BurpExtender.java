@@ -632,7 +632,7 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 				        	//requestViewer.setMessage(new byte[0], true);
 			                //responseViewer.setMessage(new byte[0], false);
 
-							requestViewer.setMessage(S.getBytes(), true);
+							requestViewer.setMessage(ExportParamValues.get(table.getSelectedRow()).get(2).getBytes(), true);
 				        	responseViewer.setMessage(S.getBytes(), true);
 				        }
 				    }
