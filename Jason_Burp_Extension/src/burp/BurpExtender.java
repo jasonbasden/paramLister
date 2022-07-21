@@ -625,7 +625,7 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 				        	//requestViewer.setMessage(getRequest(), true);
 				        	//responseViewer.setMessage(getResponse(), true);
 				        	// requestViewer.setMessage(byte[] message, boolean isRequest);
-				        	//responseViewer.setMessage(byte[] message, boolea isResponse);
+				        	// responseViewer.setMessage(byte[] message, boolean isResponse);
 				        	
 				        	
 				        	//The code below is for clearing the requestViewer and the responseViewer
