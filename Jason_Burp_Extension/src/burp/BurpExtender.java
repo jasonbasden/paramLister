@@ -86,7 +86,6 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
     
     public String hackerString = "";
     public String S = new String();
-	// public String SResponse = new String();
     
     public Clipboard CB;
     JPopupMenu TablePopupMenu;
@@ -633,7 +632,7 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 			                //responseViewer.setMessage(new byte[0], false);
 
 							requestViewer.setMessage(ExportParamValues.get(table.getSelectedRow()).get(2).getBytes(), true);
-				        	// responseViewer.setMessage(ExportParamValues.get(table.getSelectedRow()).get(3).getBytes(), true); //create a string for this
+				        	responseViewer.setMessage(ExportParamValues.get(table.getSelectedRow()).get(3).getBytes(), true); //create a string for this
 				        }
 				    }
 				});
@@ -659,11 +658,7 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 	
 	@Override //intercepting messages can be messageIs Request or Response. IHttpRequestResponse is an object
 	public void processHttpMessage(int toolFlag, boolean messageIsRequest, IHttpRequestResponse messageInfo) {
-		if (!messageIsRequest){
-			String SResponse = new String(messageInfo.getResponse(),StandardCharsets.UTF_8);
-			this.debug.println(SResponse);
-		}
-		if (messageIsRequest)
+		if (!messageIsRequest)
 		{
 			if (callbacks.isInScope(helpers.analyzeRequest(messageInfo).getUrl()))
 		
@@ -680,6 +675,7 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 				//Example code to see how to get the request and how to convert a byte array to a string.
 				//String S = new String(messageInfo.getRequest(),StandardCharsets.UTF_8); Made this variable public. Setting it below.
 				S = new String(messageInfo.getRequest(),StandardCharsets.UTF_8);
+				String SResponse = new String(messageInfo.getResponse(),StandardCharsets.UTF_8);
 				//this.debug.println(S);
 			    
 				
@@ -724,7 +720,7 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 							//paramsCopyExport.add(new Object[]{param.getName(), param.getValue()});
 							//paramsCopyExport.addAll(param.getName(), param.getValue());
 							//paramHashTable.put(param.getName(), param.getValue());
-							ExportParamValues.add(List.of(param.getName(), param.getValue(), S));
+							ExportParamValues.add(List.of(param.getName(), param.getValue(), S, SResponse));
 							hackerString += param.getName() + "=" + param.getValue() + "\n";
 							
 						}
@@ -732,14 +728,14 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 						{
 							model.addRow(new Object[]{param.getName(), null});
 							//paramHashTable.put(param.getName(), null);
-							ExportParamValues.add(List.of(param.getName(), null, S));
+							ExportParamValues.add(List.of(param.getName(), null, S, SResponse));
 							hackerString += param.getName() + "=\n";
 						}
 						else if(GetParameters == false && GetValues == true)
 						{
 							model.addRow(new Object[]{null, param.getValue()});
 							//paramHashTable.put(null, param.getValue());
-							ExportParamValues.add(List.of(null, param.getValue(), S));
+							ExportParamValues.add(List.of(null, param.getValue(), S, SResponse));
 							hackerString += "=" + param.getValue() + "\n";
 						}
 
