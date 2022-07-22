@@ -86,6 +86,7 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
     
     public String hackerString = "";
     public String S = new String();
+    public String SResponse = new String();
 
     
     public Clipboard CB;
@@ -605,7 +606,6 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 /*																					COMMENTING THIS OUT TO FIX BROKEN PLUGIN
 			    //getting selected row
 			    Integer selectedRow = table.getSelectedRow();
-
 			    byte[] selectedByte = selectedRow.byteValue();
 			    requestViewer.setMessage(getRequest(selectedRow), true);
 			    requestViewer.setMessage(selectedByte, true);
@@ -624,17 +624,21 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 				            //maybe something like below
 				        	//requestViewer.setMessage(getRequest(), true);
 				        	//responseViewer.setMessage(getResponse(), true);
-				        	//requestViewer.setMessage(byte[] message, boolean isRequest);
-				        	//responseViewer.setMessage(byte[] message, boolean isResponse);
-				        	
-				        	//code to convert string back to byte array
-				        	requestViewer.setMessage(S.getBytes(), true);
-				        	responseViewer.setMessage(S.getBytes(), true);
+				        	// requestViewer.setMessage(byte[] message, boolean isRequest);
+				        	// responseViewer.setMessage(byte[] message, boolean isResponse);
 				        	
 				        	
-				        	//The code (example code) below is for clearing the requestViewer and the responseViewer
+				        	//The code below is for clearing the requestViewer and the responseViewer
 				        	//requestViewer.setMessage(new byte[0], true);
 			                //responseViewer.setMessage(new byte[0], false);
+
+						// This sets the Request UI
+						// ExportparamValues: nested array with (name, value, request)
+						// table.getSelectedRow: this returns index of selected row
+						// get: this fetches data in the nested array based off index
+						requestViewer.setMessage(ExportParamValues.get(table.getSelectedRow()).get(2).getBytes(), true);
+				        	//responseViewer.setMessage(S.getBytes(), true); //TODO: Make similar to requestViewer
+						responseViewer.setMessage(ExportParamValues.get(table.getSelectedRow()).get(3).getBytes(), true); //create a string for this
 				        }
 				    }
 				});
@@ -678,6 +682,7 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 				//String S = new String(messageInfo.getRequest(),StandardCharsets.UTF_8); Made this variable public. Setting it below.
 				S = new String(messageInfo.getRequest(),StandardCharsets.UTF_8);
 				//this.debug.println(S);
+				SResponse = new String(messageInfo.getResponse(),StandardCharsets.UTF_8);
 			    
 				
 				
@@ -720,7 +725,7 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 							//paramsCopyExport.add(new Object[]{param.getName(), param.getValue()});
 							//paramsCopyExport.addAll(param.getName(), param.getValue());
 							//paramHashTable.put(param.getName(), param.getValue());
-							ExportParamValues.add(List.of(param.getName(), param.getValue(), S));
+							ExportParamValues.add(List.of(param.getName(), param.getValue(), S, SResponse));
 							hackerString += param.getName() + "=" + param.getValue() + "\n";
 							
 						}
@@ -728,14 +733,14 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 						{
 							model.addRow(new Object[]{param.getName(), null});
 							//paramHashTable.put(param.getName(), null);
-							ExportParamValues.add(List.of(param.getName(), null, S));
+							ExportParamValues.add(List.of(param.getName(), null, S, SResponse));
 							hackerString += param.getName() + "=\n";
 						}
 						else if(GetParameters == false && GetValues == true)
 						{
 							model.addRow(new Object[]{null, param.getValue()});
 							//paramHashTable.put(null, param.getValue());
-							ExportParamValues.add(List.of(null, param.getValue(), S));
+							ExportParamValues.add(List.of(null, param.getValue(), S, SResponse));
 							hackerString += "=" + param.getValue() + "\n";
 						}
 
@@ -777,7 +782,6 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 	{
     //getting selected row
     Integer selectedRow = table.getSelectedRow();
-
     //Convert to byte
     byte [] selectedByte = selectedRow.byteValue();
     
@@ -818,7 +822,6 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
     {
         JMenuItem menu = (JMenuItem) event.getSource();
         int row = this.getSelectedRow();
-
         // If no row is selected
         if (row == -1)
             return;
@@ -848,7 +851,6 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
             // Clear request/response 
             requestViewer.setMessage(new byte[0], true);
             responseViewer.setMessage(new byte[0], false);
-
         }
     }*/
 
@@ -922,17 +924,11 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-
-
 	@Override
 	public byte[] getRequest() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-
-
 	@Override
 	public byte[] getResponse() {
 		// TODO Auto-generated method stub
@@ -948,7 +944,6 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 {
     int payloadIndex;
  
-
     
     @Override
     public boolean hasMorePayloads()
@@ -956,7 +951,6 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
         //return payloadIndex < PAYLOADS.length;
     	return payloadIndex < PAYLOADS.length;
     }
-
     @Override
     public byte[] getNextPayload(byte[] baseValue)
     {
@@ -964,7 +958,6 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
         payloadIndex++;
         return payload;
     }
-
     @Override
     public void reset()
     {
@@ -991,4 +984,3 @@ public void actionPerformed(ActionEvent actionEvent) {
 	
 }
 }*/
-
