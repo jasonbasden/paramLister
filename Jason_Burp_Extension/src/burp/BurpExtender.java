@@ -86,7 +86,7 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
     
     public String hackerString = "";
     public String S = new String();
-
+	// public String SResponse = new String();
     
     public Clipboard CB;
     JPopupMenu TablePopupMenu;
@@ -633,7 +633,7 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 			                //responseViewer.setMessage(new byte[0], false);
 
 							requestViewer.setMessage(ExportParamValues.get(table.getSelectedRow()).get(2).getBytes(), true);
-				        	responseViewer.setMessage(S.getBytes(), true);
+				        	// responseViewer.setMessage(ExportParamValues.get(table.getSelectedRow()).get(3).getBytes(), true); //create a string for this
 				        }
 				    }
 				});
@@ -659,6 +659,10 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 	
 	@Override //intercepting messages can be messageIs Request or Response. IHttpRequestResponse is an object
 	public void processHttpMessage(int toolFlag, boolean messageIsRequest, IHttpRequestResponse messageInfo) {
+		if (!messageIsRequest){
+			String SResponse = new String(messageInfo.getResponse(),StandardCharsets.UTF_8);
+			this.debug.println(SResponse);
+		}
 		if (messageIsRequest)
 		{
 			if (callbacks.isInScope(helpers.analyzeRequest(messageInfo).getUrl()))
@@ -682,7 +686,8 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 				
 				
 				//hashtable clear https://www.geeksforgeeks.org/hashtable-clear-method-in-java/
-				
+				// String SResponse = new String(messageInfo.getResponse(),StandardCharsets.UTF_8);
+				// this.debug.println(SResponse);
 				//List<String> paramm = new List<String>();
 				
 				//repeat list for payload generator
