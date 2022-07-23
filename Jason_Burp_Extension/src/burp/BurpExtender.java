@@ -86,8 +86,6 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
     
     public String hackerString = "";
     public String S = new String();
-    public String SResponse = new String();
-
     
     public Clipboard CB;
     JPopupMenu TablePopupMenu;
@@ -349,6 +347,10 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 		            	model.setRowCount(0); //https://stackoverflow.com/questions/4577792/how-to-clear-jtable
 		            	paramHashTable.clear();
 		            	hackerString = "";	
+		            	
+		            	//Code below resets the requestViewer/responseViewer
+		            	requestViewer.setMessage(new byte[0], true);
+		                responseViewer.setMessage(new byte[0], false);
 		            }
 		        });
 		        
@@ -632,13 +634,8 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 				        	//requestViewer.setMessage(new byte[0], true);
 			                //responseViewer.setMessage(new byte[0], false);
 
-						// This sets the Request UI
-						// ExportparamValues: nested array with (name, value, request)
-						// table.getSelectedRow: this returns index of selected row
-						// get: this fetches data in the nested array based off index
-						requestViewer.setMessage(ExportParamValues.get(table.getSelectedRow()).get(2).getBytes(), true);
-				        	//responseViewer.setMessage(S.getBytes(), true); //TODO: Make similar to requestViewer
-						responseViewer.setMessage(ExportParamValues.get(table.getSelectedRow()).get(3).getBytes(), true); //create a string for this
+							requestViewer.setMessage(ExportParamValues.get(table.getSelectedRow()).get(2).getBytes(), true);
+				        	responseViewer.setMessage(ExportParamValues.get(table.getSelectedRow()).get(3).getBytes(), true); //create a string for this
 				        }
 				    }
 				});
@@ -664,7 +661,7 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 	
 	@Override //intercepting messages can be messageIs Request or Response. IHttpRequestResponse is an object
 	public void processHttpMessage(int toolFlag, boolean messageIsRequest, IHttpRequestResponse messageInfo) {
-		if (messageIsRequest)
+		if (!messageIsRequest)
 		{
 			if (callbacks.isInScope(helpers.analyzeRequest(messageInfo).getUrl()))
 		
@@ -681,14 +678,15 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 				//Example code to see how to get the request and how to convert a byte array to a string.
 				//String S = new String(messageInfo.getRequest(),StandardCharsets.UTF_8); Made this variable public. Setting it below.
 				S = new String(messageInfo.getRequest(),StandardCharsets.UTF_8);
+				String SResponse = new String(messageInfo.getResponse(),StandardCharsets.UTF_8);
 				//this.debug.println(S);
-				SResponse = new String(messageInfo.getResponse(),StandardCharsets.UTF_8);
 			    
 				
 				
 				
 				//hashtable clear https://www.geeksforgeeks.org/hashtable-clear-method-in-java/
-				
+				// String SResponse = new String(messageInfo.getResponse(),StandardCharsets.UTF_8);
+				// this.debug.println(SResponse);
 				//List<String> paramm = new List<String>();
 				
 				//repeat list for payload generator
