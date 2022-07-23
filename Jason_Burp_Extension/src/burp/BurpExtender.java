@@ -328,6 +328,8 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
                         StringSelection contents = new StringSelection(hackerString);
                         clipboard.setContents(contents, contents);
                         JOptionPane.showMessageDialog(null, "Text Copied");
+                        
+
 		            	
 		            }
 		        });
@@ -514,7 +516,9 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 		            public void actionPerformed(ActionEvent e) {
 		            	model.setRowCount(0); //https://stackoverflow.com/questions/4577792/how-to-clear-jtable
 		            	paramHashTable.clear();
-		            	hackerString = "";		            }
+		            	hackerString = "";	
+		            	requestViewer.setMessage(new byte[0], true);
+		                responseViewer.setMessage(new byte[0], false);}
 		        });
 		        
 		        menuItemCopyList.addActionListener(new ActionListener() {
