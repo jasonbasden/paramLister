@@ -58,9 +58,11 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
     static JCheckBox RDCheckBox;
     static JCheckBox ParamCheckBox;
     static JCheckBox ValuesCheckBox;
+    static JCheckBox ScopeCheckBox;
     
     public boolean GetParameters = true;
     public boolean GetValues = true;
+    public boolean inScope = true;
     
     private JTextArea t1;
     private JTextArea t2;
@@ -142,10 +144,27 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 		        
 		        
 		        RDCheckBox = new JCheckBox("Remove Duplicates");
+		        RDCheckBox.setSelected(true);
 		        ParamCheckBox = new JCheckBox("Show Parameters");
 		        ParamCheckBox.setSelected(true);  
 		        ValuesCheckBox = new JCheckBox("Show Values");
 		        ValuesCheckBox.setSelected(true);
+		        ScopeCheckBox = new JCheckBox("In-scope requests only");
+		        ScopeCheckBox.setSelected(true);
+		        
+		        
+		        RDCheckBox.addActionListener(new ActionListener() {
+		            @Override
+		            public void actionPerformed(ActionEvent e) 
+		            {
+		                if(RDCheckBox.isSelected())
+		                {
+		                	removeduplicates();
+		                }
+		            }
+		               
+		            });
+		        
 		        
 		        ParamCheckBox.addActionListener(new ActionListener() {
 		            @Override
@@ -176,6 +195,19 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 		            }
 		        });
 		        
+		        
+		        ScopeCheckBox.addActionListener(new ActionListener() {
+		            @Override
+		            public void actionPerformed(ActionEvent e) {
+		                if(ScopeCheckBox.isSelected()) 
+		                {
+		                	inScope = true;
+		                }
+		                else {
+		                	inScope = false;
+		                }
+		            }
+		        });
 		        
 		  
 		        // Creating buttons
@@ -403,6 +435,10 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 		        gbc.gridx = 6;
 		        gbc.gridy = 0;
 		        p2.add(ValuesCheckBox, gbc);
+		        gbc.gridx = 7;
+		        gbc.gridy = 0;
+		        p2.add(ScopeCheckBox,gbc);
+		     
 		        
 		        gbc.gridx = 3;
 		        gbc.gridy = 1;
@@ -667,15 +703,26 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 	public void processHttpMessage(int toolFlag, boolean messageIsRequest, IHttpRequestResponse messageInfo) {
 		if (!messageIsRequest)
 		{
-			if (callbacks.isInScope(helpers.analyzeRequest(messageInfo).getUrl()))
+			if(inScope && callbacks.isInScope(helpers.analyzeRequest(messageInfo).getUrl()))
+			{
+					//this.debug.println("Intercepted Request");
+					//if (this.callbacks.TOOL_REPEATER == toolFlag);
+					//{ 
+					//if(this.callbacks.TOOL_SPIDER == toolFlag) saving code for adding in spider functionality later.
+					scope(messageInfo);
+			}
+			else if(!inScope) 
+			{
+				scope(messageInfo);
+			}
+		}
 		
-			//this.debug.println("Intercepted Request");
-			//if (this.callbacks.TOOL_REPEATER == toolFlag);
-			//{ 
-				//if(this.callbacks.TOOL_SPIDER == toolFlag) saving code for adding in spider functionality later.
-
-			
-			{	//.getParameters() pulls parameters into list.
+		
+	}
+	
+	public void scope(IHttpRequestResponse messageInfo)
+	{
+//.getParameters() pulls parameters into list.
 				List<IParameter> params = helpers.analyzeRequest(messageInfo).getParameters();
 				
 				
@@ -685,40 +732,26 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 				String SResponse = new String(messageInfo.getResponse(),StandardCharsets.UTF_8);
 				//this.debug.println(S);
 			    
-				
-				
-				
-				//hashtable clear https://www.geeksforgeeks.org/hashtable-clear-method-in-java/
-				// String SResponse = new String(messageInfo.getResponse(),StandardCharsets.UTF_8);
-				// this.debug.println(SResponse);
-				//List<String> paramm = new List<String>();
-				
-				//repeat list for payload generator
-				//List<IParameter> payloadParams = helpers.analyzeRequest(messageInfo).getParameters();
-				
-				
-				
-				//this.debug.println(messageInfo.getHost());
-				//this.debug.println(messageInfo.getUrl());
-				
-				//create an IRequestInfo object to analyze the requests
-				//IRequestInfo request = this.helpers.analyzeRequest(messageInfo.getHttpService(), messageInfo.getRequest());
-				for (IParameter param : params)//for each loop to iterate through the params list
+
+				paramloop: for (IParameter param : params)//for each loop to iterate through the params list
 				{
-				
+					if(RDCheckBox.isSelected())
+					{
+					for(int i = 0; i < ExportParamValues.size(); i++)
+					{
+						if(param.getName().equals(ExportParamValues.get(i).get(0)) && param.getValue().equals(ExportParamValues.get(i).get(1)))
+						{
+							break paramloop;
+						}
+					}
+					}
 					//code used to discern the type of parameter - debug.println(param.getType()); 
 				
 					if(param.getType() == param.PARAM_URL)
 					{
-						debug.print(param.getName()+"=");
-						debug.println(param.getValue());
-						debug.println(S); //adding in message info in the output window
-						//add values to table
-						
-					
-						//model.addRow(new Object[]{param.getName(), param.getValue()}); //original code
-						
-						//model.addRow(new Object[]{param.getName().toString(), param.getValue().toString()}); //just added trying to fix copy to clipboard
+						//debug.print(param.getName()+"=");
+						//debug.println(param.getValue());
+						//debug.println(S); //adding in message info in the output window
 						
 						//condition to determine what user wants added to the table
 						if(GetParameters == true && GetValues == true)
@@ -750,52 +783,37 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 			            
 
 						
-						//add a check to filter out duplicate values
 						
 					}
-					/*else if to pull in cookie values
-					else if (param.getType() == param.PARAM_COOKIE)
-					{
-						debug.print(param.getName()+"=");
-						debug.println(param.getValue());
-					}*/
-					
-					//Code for Export To Intruder - Ignore for now
+
 					if(param.getType() == param.PARAM_URL)
 					{
 						//payloadParams.add(param.getValue().getBytes());
 						payloadParams.add(param.getValue());
 					}
 				} 
-				/*for(String paramBytes : payloadParams)
-				{
-					payloadParams = paramBytes.toBytes();
-				}*/
+
+	
+	}
+	
+	public void removeduplicates()
+	{
+		
+		for(int j = 0; j < ExportParamValues.size() - 1; j++)
+		{
+			for(int h = j + 1; h < ExportParamValues.size(); h++)
+			{
+				if(ExportParamValues.get(j).get(0).equals(ExportParamValues.get(h).get(0)) && ExportParamValues.get(j).get(1).equals(ExportParamValues.get(h).get(1)))
+					{
+						ExportParamValues.remove(h);
+						model.removeRow(h);
+						h--;
+					}
+
 			}
-			//}
-			
 		}
 		
-		
 	}
-	//@Override 
-	/*
-	public void getSelectedRow(Integer row, boolean isRequest)
-	{
-    //getting selected row
-    Integer selectedRow = table.getSelectedRow();
-    //Convert to byte
-    byte [] selectedByte = selectedRow.byteValue();
-    
-    //Set the requestViewer to the byteValue() - The getRequest method will not allow integers, must use byte
-    //requestViewer.setMessage(getRequest(selectedRow), true);
-    requestViewer.setMessage(getRequest(selectedByte));
-    //requestViewer.setMessage(selectedByte, true);
-    
-    //requestViewer.setMessage(getRequest), true);
-	}*/
-	
-	
 	
 	
 	@Override
