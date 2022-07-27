@@ -77,6 +77,9 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
     
     //public List<IParameter> params = new List<>();
     
+    public IHttpRequestResponse currentRequestResponse;
+
+    
 	Hashtable<String, String> paramHashTable = new Hashtable<String, String>();
 
     public List<String> paramm;
@@ -217,11 +220,18 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 		        b3 = new JButton("Listen from Spider");
 		        b4 = new JButton("Clear List");
 		        
-		        /*b.addActionListener(new ActionListener() {
+		        b.addActionListener(new ActionListener() {
 	            @Override
 	            public void actionPerformed(ActionEvent e) {
-	            	ADD CODE FOR EXPORT TO INTRUDER
-	        });*/
+	            	//ADD CODE FOR EXPORT TO INTRUDER
+	            	//ExportParamValues.get(table.getSelectedRow()).get(3).getBytes(), true);
+	            	//callbacks.sendToIntruder(.url.getHost(), reflectedEntry.url.getPort(), useHttps,
+	                //        reflectedEntry.requestResponse.getRequest(), reflectedEntry.requestResponse.getRequestMarkers());
+	            	
+	            	//callbacks.sendToIntruder(S, ABORT, rootPaneCheckingEnabled, getRequest());
+	            	
+	            } 	
+	        });
 		        
 		        
 		        /*b1.addActionListener(new ActionListener() {
@@ -385,6 +395,9 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 		            	//Code below resets the requestViewer/responseViewer
 		            	requestViewer.setMessage(new byte[0], true);
 		                responseViewer.setMessage(new byte[0], false);
+		                
+		                //Code to clear the list
+		                ExportParamValues.clear();
 		            }
 		        });
 		        
@@ -550,11 +563,13 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 		        menuItemClearList.addActionListener(new ActionListener() {
 		            @Override
 		            public void actionPerformed(ActionEvent e) {
+		            	ExportParamValues.clear();
 		            	model.setRowCount(0); //https://stackoverflow.com/questions/4577792/how-to-clear-jtable
 		            	paramHashTable.clear();
 		            	hackerString = "";	
 		            	requestViewer.setMessage(new byte[0], true);
 		                responseViewer.setMessage(new byte[0], false);}
+		            	
 		        });
 		        
 		        menuItemCopyList.addActionListener(new ActionListener() {
@@ -914,7 +929,8 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 	@Override
 	public IHttpService getHttpService() {
 		// TODO Auto-generated method stub
-		return null;
+		//return null;
+		return currentRequestResponse.getHttpService();
 	}
 
 
