@@ -276,75 +276,18 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 		        			BufferedWriter bw = new BufferedWriter(fw);
 		        			
 		        			
-		        			/*original code
-		        			for(int i = 0; i < model.getRowCount(); i++) {
-		        				for(int j = 0; j < model.getColumnCount(); i++) {
-		        					bw.write(model.getValueAt(i, j) + " ");
-		        				}
-		        				bw.write("\n_________\n");
-		        			} Code stop*/
-		        			
-		        			
-		        			//bw.write(paramHashTable);
-		        	        //System.out.println(paramHashTable);
-		        	        //Set<String> keys = paramHashTable.keySet();
-		        	        //for(String key: keys)
-		        	        //{
-		        	            //System.out.println("Value of "+key+" is: "+paramHashTable.get(key));   This is example code
-		        	        	//bw.write(key+"="+paramHashTable.get(key)); 273 and 274 = working code
-		        	        	//bw.newLine();
-		        	        	/*if(!key.isEmpty() && !paramHashTable.get(key).isEmpty())  ****First attempt at hashtable
-		        	        	{
-		        	        		bw.write(key+"="+paramHashTable.get(key));
-			        	        	bw.newLine();
-		        	        	}
-		        	        	else if(!key.isEmpty() && paramHashTable.get(key).isEmpty())
-		        	        	{
-		        	        		bw.write(key);
-		        	        		bw.newLine();
-		        	        	}
-		        	        	else if(key.isEmpty() && !paramHashTable.get(key).isEmpty())
-		        	        	{
-		        	        		bw.write(paramHashTable.get(key));
-		        	        		bw.newLine();
-		        	        	}*/
-		        	        	
-		        	        	/*if(key != null && paramHashTable.get(key) != null)     *****Second attempt at hashtable
-		        	        	{
-		        	        		bw.write(key+"="+paramHashTable.get(key));
-			        	        	bw.newLine();
-		        	        	}
-		        	        	else if(key != null && paramHashTable.get(key) == null)
-		        	        	{
-		        	        		bw.write(key);
-		        	        		bw.newLine();
-		        	        	}
-		        	        	else if(key == null && paramHashTable.get(key) != null)
-		        	        	{
-		        	        		bw.write(paramHashTable.get(key));
-		        	        		bw.newLine();
-		        	        	}*/
-		        	        //}
-		        			/*for(int i = 0; i < ExportParamValues.size(); i++) {
-		        				for(int j = 0; j < ExportParamValues.size(); i++) {
-		        					bw.write(ExportParamValues. + "=");  
-		        				
-		        					
-		        					
-		        				}
-		        				
-		        				bw.newLine();
-		        			}*/
-		        			
+
 		        			//use exportTextFile after uploading code
-		        			for(List<String> l : ExportParamValues)
+		        			/*for(List<String> l : ExportParamValues)
 		        			{
       						  for(String i:l)
       						  {
       						    bw.write(i + " ");
       						  }
       						  bw.newLine();
-      						}
+      						}*/
+		        			
+		        			bw.write(hackerString);
 		        			
 		        			
 		        			bw.close();
