@@ -88,6 +88,7 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
     public List<String> payloadParams = new ArrayList<String>(); //not using right now
     
     public List<List<String>> ExportParamValues = new ArrayList<>();
+    public List<List<String>> exportTextFile = new ArrayList<>(); //export to text file
     
     public String hackerString = "";
     public String S = new String();
@@ -137,8 +138,7 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 				//panel = new JPanel();//tiberious tutorial
 				
 				//Imported code from https://www.geeksforgeeks.org/java-swing-jpanel-with-examples/
-				// Creating a new frame to store text field and
-		        // button
+				// Creating a new frame to store text field and button
 		        f = new JFrame("paramListerJFrame");
 		  
 		        
@@ -265,9 +265,9 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 		        				file.createNewFile();
 		        			}*/
 		        			
-		        			String userDirectory = JOptionPane.showInputDialog("Type the directory you to which you would like to download the file.");
+		        			String userDirectory = JOptionPane.showInputDialog("Type the directory you to which you would like to download the file. Ex: /Users/userProfile/Documents/paramTest_File.txt");
 		        			
-		        			//File file = new File("/Users/jbasden/Documents/paramTest_File.txt");
+		        			//File file = new File("");
 		        			File file = new File(userDirectory);
 		        			
 		        			file.createNewFile();
@@ -336,7 +336,7 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 		        				bw.newLine();
 		        			}*/
 		        			
-		        			
+		        			//use exportTextFile after uploading code
 		        			for(List<String> l : ExportParamValues)
 		        			{
       						  for(String i:l)
@@ -428,17 +428,9 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 		        p.add(t1);
 		        p2.add(t2, gbc);
 		  
-		        // create a splitpane
-		        /*sl = new JSplitPane(SwingConstants.VERTICAL, p2, scrollPane);
-		  
-		        // set Orientation for slider
-		        sl.setOrientation(SwingConstants.VERTICAL);
-		  
-		        // add panel
-		        f.add(sl); //end splitPane code*/
+
 		        
 		        // Adding lable, buttons, checkboxes, textfield to panel
-		        //p2.add(l);
 		        gbc.gridx = 4;
 		        gbc.gridy = 0;
 		        p2.add(RDCheckBox, gbc);
@@ -486,40 +478,19 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 		        model.addColumn("Parameter Names"); 
 		        model.addColumn("Parameter Values"); 
 
-		        // Append a row 
-		        //model.addRow(new Object[]{"parameters", "values"});
-		        
-		        //p.add(table, BorderLayout.CENTER); //Add the table to the panel
-		        //p.add(table);
-		        
-		        //Create the list
-		        //JList paramValues = new JList();
-		        //p.JList(params.getValue());
+
 		        
 		        
 		  
 		        // setbackground of panel
 		        p.setBackground(Color.white);
-		  
-		        // Adding panel to frame
-		        //f.add(p);
-		  
-		        // Setting the size of frame THIS NEEDS TO BE TAKEN OUT 
-		        /*f.setSize(300, 300);
-		        f.setVisible(true);
-		        f.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);*/ //
-		  
-		        //f.show();
-		        
-		        
+     
 		        
 		        
 		        scrollPane = new JScrollPane(table);
 		        scrollPane.setBounds(10, 304, 461, 189);
 		        scrollPane.add(l);
-		        //p.add(scrollPane);
-		        // create a splitpane
-		        // maybe add new JSplitPane(SwingConstants.HORIZONTAL, p2, p);
+		       
 		        
 
 		        // UI for adding in requests Table. 
@@ -532,26 +503,17 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
                 tabs.addTab("Request", requestViewer.getComponent());
                 tabs.addTab("Response", responseViewer.getComponent());
                 
-                //I should not need the commented code below. Saving for the moment.
-                //reqSplitPane.add(tabs);
-                //should just need tabs not the table. Skip code commented out below.
-                //reqSplitPane.setRightComponent(reqSplitPane2);
-                //reqSplitPane2.setRightComponent(tabs);
-                //reqSplitPane.setDividerLocation(0.5);
-                //reqSplitPane2.setDividerLocation(0.3); // End UI for requests table. 
 		        
 		        sp1 = new JSplitPane(SwingConstants.HORIZONTAL, p2, tabs);
 		        sl = new JSplitPane(SwingConstants.VERTICAL, sp1, scrollPane); 
 		        
-		        //sl = new JSplitPane(SwingConstants.VERTICAL, p2, scrollPane); 
 		  
 		        // set Orientation for slider
 		        sl.setOrientation(SwingConstants.VERTICAL);
 		  
 		        // add panel
 		        f.add(sl); //end splitPane code
-		        
-		        //f.getContentPane().add(scrollPane);
+		      
 		       
 		        //action listener for popupmenu
 		        //ActionListener actionListener = new PopupActionListener();
@@ -562,7 +524,8 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 		        menuItemCopyList = new JMenuItem("Copy List");
 		        menuItemClearList.addActionListener(new ActionListener() {
 		            @Override
-		            public void actionPerformed(ActionEvent e) {
+		            public void actionPerformed(ActionEvent e) 
+		            {
 		            	ExportParamValues.clear();
 		            	model.setRowCount(0); //https://stackoverflow.com/questions/4577792/how-to-clear-jtable
 		            	paramHashTable.clear();
@@ -574,12 +537,10 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 		        
 		        menuItemCopyList.addActionListener(new ActionListener() {
 		            @Override
-		            public void actionPerformed(ActionEvent e2) {
-		            	//String  str = model.toString(); 
-		            	
-		            	
+		            public void actionPerformed(ActionEvent e2) 
+		            {
+
                         Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-                        //StringSelection contents = new StringSelection(ExportParamValues.toString());
                         StringSelection contents = new StringSelection(hackerString);
                         clipboard.setContents(contents, contents);
                         JOptionPane.showMessageDialog(null, "Text Copied");
@@ -587,88 +548,23 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 		            }
 		        });
 		        
-		        // Copy
-		        /*JMenuItem copyMenuItem = new JMenuItem("Copy");
-		        copyMenuItem.addActionListener(actionListener);
-		        TablePopupMenu.add(copyMenuItem);*/ //Added this code - prob don't need it
-		        
-		        
-		        //menuItemClearList.addActionListener((ActionListener) table); this code is breaking the extension
-		        //menuItemCopyList.addActionListener((ActionListener) table);
-		        
-		        
-		        
-		        /*menuItemClearList.addActionListener(new ActionListener() {
-		            @Override
-		            public void actionPerformed(ActionEvent e) {
-		            	model.setRowCount(0); //https://stackoverflow.com/questions/4577792/how-to-clear-jtable
-		            }
-		        });
-		        
-		        menuItemCopyList.addActionListener(new ActionListener() {
-		            @Override
-		            public void actionPerformed(ActionEvent e) {
-		            	
-		            }
-		        });*/
-		       
-		        //menuItemClearList.addActionListener((ActionListener) scrollPane);
-		        //menuItemCopyList.addActionListener((ActionListener) scrollPane);
-		        
-		        
+   
 		        
 		        
 		        TablePopupMenu.add(menuItemClearList); 
 		        TablePopupMenu.add(menuItemCopyList);
 		        
-		        
-		        //TablePopupMenu.show(e.getComponent(), e.getX(), e.getY());
-		        
-		        /*f.addMouseListener(
-		        		new MouseAdapter()
-		        		{
-		        			public void MouseReleased(MouseEvent e)
-		        			{
-		        				if(e.getButton() == MouseEvent.BUTTON3)
-		        				{
-		        					TablePopupMenu.show(e.getComponent(), e.getX(), e.getY());
-		        				}
-		        			}
-		        		}
-		        		);*/
+
 		        
 		        table.setComponentPopupMenu(TablePopupMenu);
-		        /*f.addMouseListener(new MouseAdapter() {
-		        	@Override
-		        	public void mouseReleased(MouseEvent e) {
-		        		if(SwingUtilities.isRightMouseButton(e))
-		        		{
-		    		        TablePopupMenu.add(menuItemClearList);
-		    		        TablePopupMenu.add(menuItemCopyList);
-		        			TablePopupMenu.show(e.getComponent(), e.getX(), e.getY());
-		        		}
-		        	}
-		        });*/
-		        
-		        //scrollPane.setComponentPopupMenu(TablePopupMenu);
 		        
 		        
 				//calling the tab name and the UI components
 				//callbacks.customizeUiComponent(panel);
 				callbacks.customizeUiComponent(f);
 				callbacks.addSuiteTab(BurpExtender.this);
-				
-				
-				
-/*																					COMMENTING THIS OUT TO FIX BROKEN PLUGIN
-			    //getting selected row
-			    Integer selectedRow = table.getSelectedRow();
-			    byte[] selectedByte = selectedRow.byteValue();
-			    requestViewer.setMessage(getRequest(selectedRow), true);
-			    requestViewer.setMessage(selectedByte, true);
-			    
-			    requestViewer.setMessage(getRequest), true);
-*/				
+							
+							
 				
 				table.getSelectionModel().addListSelectionListener(new ListSelectionListener() {
 				    @Override
@@ -677,17 +573,6 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 				            // print first column value from selected row
 				            //System.out.println(table.getValueAt(table.getSelectedRow(), 0).toString());
 				            
-				            //above is example code. Need to add code to set the request viewer and response viewer.
-				            //maybe something like below
-				        	//requestViewer.setMessage(getRequest(), true);
-				        	//responseViewer.setMessage(getResponse(), true);
-				        	// requestViewer.setMessage(byte[] message, boolean isRequest);
-				        	// responseViewer.setMessage(byte[] message, boolean isResponse);
-				        	
-				        	
-				        	//The code below is for clearing the requestViewer and the responseViewer
-				        	//requestViewer.setMessage(new byte[0], true);
-			                //responseViewer.setMessage(new byte[0], false);
 
 							requestViewer.setMessage(ExportParamValues.get(table.getSelectedRow()).get(2).getBytes(), true);
 				        	responseViewer.setMessage(ExportParamValues.get(table.getSelectedRow()).get(3).getBytes(), true); //create a string for this
@@ -777,6 +662,7 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 							//paramHashTable.put(param.getName(), param.getValue());
 							ExportParamValues.add(List.of(param.getName(), param.getValue(), S, SResponse));
 							hackerString += param.getName() + "=" + param.getValue() + "\n";
+							//exportTextFile.add(List.of(param.getName(), param.getValue()));
 							
 						}
 						else if(GetParameters == true && GetValues == false)
@@ -785,6 +671,7 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 							//paramHashTable.put(param.getName(), null);
 							ExportParamValues.add(List.of(param.getName(), null, S, SResponse));
 							hackerString += param.getName() + "=\n";
+							//exportTextFile.add(List.of(param.getName(), null));
 						}
 						else if(GetParameters == false && GetValues == true)
 						{
@@ -792,6 +679,7 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 							//paramHashTable.put(null, param.getValue());
 							ExportParamValues.add(List.of(null, param.getValue(), S, SResponse));
 							hackerString += "=" + param.getValue() + "\n";
+							//exportTextFile.add(List.of(null, param.getValue()));
 						}
 
 			         
