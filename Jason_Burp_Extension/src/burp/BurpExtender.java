@@ -91,6 +91,7 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
     public List<List<String>> exportTextFile = new ArrayList<>(); //export to text file
     
     public String hackerString = "";
+    //public String hackerString = new String();
     public String S = new String();
     
     public Clipboard CB;
@@ -613,7 +614,7 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 							model.addRow(new Object[]{param.getName(), null});
 							//paramHashTable.put(param.getName(), null);
 							ExportParamValues.add(List.of(param.getName(), null, S, SResponse));
-							hackerString += param.getName() + "=\n";
+							hackerString += param.getName() + "\n";
 							//exportTextFile.add(List.of(param.getName(), null));
 						}
 						else if(GetParameters == false && GetValues == true)
@@ -621,8 +622,9 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 							model.addRow(new Object[]{null, param.getValue()});
 							//paramHashTable.put(null, param.getValue());
 							ExportParamValues.add(List.of(null, param.getValue(), S, SResponse));
-							hackerString += "=" + param.getValue() + "\n";
+							hackerString += param.getValue() + "\n";
 							//exportTextFile.add(List.of(null, param.getValue()));
+							this.debug.println(param.getValue() + "\n"); // This string is to print out to the output window in burp. Trying to debug code and see if this runs when only the values checkbox is selected.
 						}
 
 			         
