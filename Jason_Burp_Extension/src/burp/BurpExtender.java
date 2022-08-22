@@ -30,6 +30,7 @@ import java.awt.event.ActionListener;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 //hashtable
 
@@ -484,10 +485,18 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 		            public void actionPerformed(ActionEvent e2) 
 		            {
 
-                        Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
+                        /*Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
                         StringSelection contents = new StringSelection(hackerString);
-                        clipboard.setContents(contents, contents);
+                        clipboard.setContents(contents, contents);*/
+		            	
+		            	//Clipboard Clipboard = new Clipboard (hackerString);
+		                // Copy URL to the clipboard
+		            	
+		                StringSelection stringSelection = new StringSelection (hackerString);
+		                Clipboard clpbrd = Toolkit.getDefaultToolkit ().getSystemClipboard ();
+		                clpbrd.setContents (stringSelection, null);
                         JOptionPane.showMessageDialog(null, "Text Copied");
+                        //debug.println(hackerString); 
 		            	
 		            }
 		        });
@@ -608,26 +617,29 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 							hackerString += param.getName() + "=" + param.getValue() + "\n";
 							//exportTextFile.add(List.of(param.getName(), param.getValue()));
 							
+							this.debug.println("firstConditionFire\n");
+							
 						}
-						else if(GetParameters == true && GetValues == false)
+						else if(ParamCheckBox.isSelected() && !ValuesCheckBox.isSelected())
 						{
 							model.addRow(new Object[]{param.getName(), null});
 							//paramHashTable.put(param.getName(), null);
-							ExportParamValues.add(List.of(param.getName(), null, S, SResponse));
+							ExportParamValues.add(List.of(param.getName(), "", S, SResponse));
 							hackerString += param.getName() + "\n";
 							//exportTextFile.add(List.of(param.getName(), null));
+							this.debug.println("param\n");
 						}
-						else if(GetParameters == false && GetValues == true)
+						else if(!ParamCheckBox.isSelected() && ValuesCheckBox.isSelected())
 						{
 							model.addRow(new Object[]{null, param.getValue()});
 							//paramHashTable.put(null, param.getValue());
-							ExportParamValues.add(List.of(null, param.getValue(), S, SResponse));
+							ExportParamValues.add(List.of("", param.getValue(), S, SResponse));
 							hackerString += param.getValue() + "\n";
 							//exportTextFile.add(List.of(null, param.getValue()));
-							this.debug.println(param.getValue() + "\n"); // This string is to print out to the output window in burp. Trying to debug code and see if this runs when only the values checkbox is selected.
+							this.debug.println("Value\n"); // This string is to print out to the output window in burp. Trying to debug code and see if this runs when only the values checkbox is selected.
 						}
 
-			         
+
 			            
 
 						
