@@ -9,4 +9,8 @@ Installation Instructions:
 1. You can clone the repository or download the .jar file called 'paramLister.jar' in the main branch.
 
 To Clone: 
-1. 
+1. git clone https://github.com/jasonbasden/paramLister and build with your preferred IDE or CLI. The build will create a .jar file. 
+
+Adding the jar file to Burp.
+1. Click the Extender tab > Extensions.
+2. Click 'Add' and set the extension type to 'Java' and set the 
