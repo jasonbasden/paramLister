@@ -6,7 +6,7 @@ Information: The extension is written in Java.
 
 
 Installation Instructions:
-1. You can clone the repository or download the .jar file called 'paramLister.jar' in the main branch.
+1. You can clone the repository or download the .jar file called 'paramLister.jar' from the releases page (https://github.com/jasonbasden/paramLister/releases/tag/v1).
 
 To Clone: 
 1. git clone https://github.com/jasonbasden/paramLister and build with your preferred IDE or CLI. The build will create a .jar file. 
