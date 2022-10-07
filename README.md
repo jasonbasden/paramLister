@@ -13,4 +13,6 @@ To Clone:
 
 Adding the jar file to Burp.
 1. Click the Extender tab > Extensions.
-2. Click 'Add' and set the extension type to 'Java' and set the 
+2. Click 'Add' and set the Extension type to 'Java' and set the Extension file (.jar) to the paramLister.jar file and click 'Next'. 
+3. paramLister will pop up in the tabs to the right. 
+4. Set the scope for your project to begin pulling in parameters and values.
