@@ -43,7 +43,6 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 	private IBurpExtenderCallbacks callbacks;
 	private IExtensionHelpers helpers;
 	private PrintWriter debug;
-	//private JPanel panel;
 	private JPanel p;
 	private JPanel p2;
 	
@@ -76,8 +75,6 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
     
     public GridBagConstraints gbc;
     
-    //public List<IParameter> params = new List<>();
-    
     public IHttpRequestResponse currentRequestResponse;
 
     
@@ -92,7 +89,6 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
     public List<List<String>> exportTextFile = new ArrayList<>(); //export to text file
     
     public String hackerString = "";
-    //public String hackerString = new String();
     public String S = new String();
     
     public Clipboard CB;
@@ -135,11 +131,7 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 			//UI Class
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
 				
-				//panel = new JPanel();//tiberious tutorial
-				
-				//Imported code from https://www.geeksforgeeks.org/java-swing-jpanel-with-examples/
 				// Creating a new frame to store text field and button
 		        f = new JFrame("paramListerJFrame");
 		  
@@ -216,57 +208,16 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 		        
 		  
 		        // Creating buttons
-		        b = new JButton("Export to Intruder");
 		        b1 = new JButton("Export to .txt File");
-		        b2 = new JButton("Copy List to Clipboard");
-		        b3 = new JButton("Listen from Spider");
-		        b4 = new JButton("Clear List");
-		        
-		        b.addActionListener(new ActionListener() {
-	            @Override
-	            public void actionPerformed(ActionEvent e) {
-	            	//ADD CODE FOR EXPORT TO INTRUDER
-	            	//ExportParamValues.get(table.getSelectedRow()).get(3).getBytes(), true);
-	            	//callbacks.sendToIntruder(.url.getHost(), reflectedEntry.url.getPort(), useHttps,
-	                //        reflectedEntry.requestResponse.getRequest(), reflectedEntry.requestResponse.getRequestMarkers());
-	            	
-	            	//callbacks.sendToIntruder(S, ABORT, rootPaneCheckingEnabled, getRequest());
-	            	
-	            } 	
-	        });
-		        
-		        
-		        /*b1.addActionListener(new ActionListener() {
-		            @Override
-		            public void actionPerformed(ActionEvent e) {
-		            	PrintWriter out;
-						try {
-							out = new PrintWriter("Parameters.txt");
-							out.println(model);
-			            	out.close();
-						} catch (FileNotFoundException e1) {
-							// TODO Auto-generated catch block
-							e1.printStackTrace();
-							
-						}
-		            	
-		            }
-		        });*/
+		        b2 = new JButton("Copy Table to Clipboard");
+		        b4 = new JButton("Clear Table");
 		        
 		        
 		        b1.addActionListener(new ActionListener() {
 		        	@Override
 		        	public void actionPerformed(ActionEvent e) {
 		        		try {
-		        			//Change file directory - Maybe make a prompt that allows the user to specify
-		        			//File file = new File("/Users/jbasden/Documents/paramTest_File.txt");
-		        			//file.createNewFile();
-		        			
-		        			/*if(!file.exists())
-		        			{
-		        				file.createNewFile();
-		        			}*/
-		        			
+
 		        			String userDirectory = JOptionPane.showInputDialog("Type the directory you to which you would like to download the file. Ex: /Users/userProfile/Documents/paramTest_File.txt");
 		        			
 		        			//File file = new File("");
@@ -279,16 +230,7 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 		        			
 		        			
 
-		        			//use exportTextFile after uploading code
-		        			/*for(List<String> l : ExportParamValues)
-		        			{
-      						  for(String i:l)
-      						  {
-      						    bw.write(i + " ");
-      						  }
-      						  bw.newLine();
-      						}*/
-		        			
+
 		        			bw.write(hackerString);
 		        			
 		        			
@@ -297,7 +239,7 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 		        			JOptionPane.showMessageDialog(null, "Data Exported");
 		        			
 		        		} catch (IOException e1) {
-		        			e1.printStackTrace();  // change this to stdout to print the error message
+		        			e1.printStackTrace();  
 		        		}
 		        		
 		        	}
@@ -321,13 +263,7 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 		            }
 		        });
 		        
-		        /*b3.addActionListener(new ActionListener() {
-		            @Override
-		            public void actionPerformed(ActionEvent e2) {
-		            	ADD CODE FOR LISTENING FROM SPIDER
-		            	
-		            }
-		        });*/ 
+
 		        
 		        
 		        b4.addActionListener(new ActionListener() {
@@ -367,8 +303,8 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 		  
 		        // set texts
 		        t1.setText("Placeholder for the Request and Response tabs");
-		        t2.setText("Welcome to paramLister! \n \nparamLister is a Content Discovery tool that passively \nlistens for parameters and adds them to a list. \nUse the export functionality to send the list values to the \nIntruder Payloads Options [Simple List] or to a .txt file.");
-		  
+		        t2.setText("Welcome to paramLister! \n \nparamLister is a Content Discovery tool that passively listens for parameters and adds them to the table. \nUse the export functionality to use the table in other tools, such as the Intruder. \nNote: The scope needs to be set at the beginning of a project for paramLister to pull in the parameters.");
+	
 		        // add text area to panel
 		        p.add(t1);
 		        p2.add(t2, gbc);
@@ -392,54 +328,30 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 		        
 		        gbc.gridx = 3;
 		        gbc.gridy = 1;
-		        p2.add(b, gbc);
+		        p2.add(b1, gbc);
 		        
 		        gbc.gridx = 4;
 		        gbc.gridy = 1;
-		        p2.add(b1, gbc);
+		        p2.add(b2, gbc);
 		        
 		        gbc.gridx = 5;
 		        gbc.gridy = 1;
-		        p2.add(b2, gbc);
-		        
-		        gbc.gridx = 6;
-		        gbc.gridy = 1;
-		        p2.add(b3, gbc);
-		        
-		        gbc.gridx = 7;
-		        gbc.gridy = 1;
 		        p2.add(b4, gbc);
-		        
-		        
-		        
-		        //Create the Table - https://stackoverflow.com/questions/3549206/how-to-add-row-in-jtable
-		       // DefaultTableModel model = new DefaultTableModel(); //hack to add rows after the table is created
-		        //JTable table = new JTable(model); 
-		        
-		        // frame.getContentPane().add(table);
 		        
 		        
 		        // Create a couple of columns 
 		        model.addColumn("Parameter Names"); 
 		        model.addColumn("Parameter Values"); 
-
-
-		        
 		        
 		  
 		        // setbackground of panel
 		        p.setBackground(Color.white);
-     
-		        
+     	        
 		        
 		        scrollPane = new JScrollPane(table);
 		        scrollPane.setBounds(10, 304, 461, 189);
 		        scrollPane.add(l);
 		       
-		        
-
-		        // UI for adding in requests Table. 
-		        //reqScrollPane = new JScrollPane(requestsTable);
 		        
                 // Tabs with request/response viewers
                 JTabbedPane tabs = new JTabbedPane();
@@ -465,8 +377,8 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 				//creating a popup menu
 		        TablePopupMenu = new JPopupMenu();
 		        
-		        menuItemClearList = new JMenuItem("Clear List");
-		        menuItemCopyList = new JMenuItem("Copy List");
+		        menuItemClearList = new JMenuItem("Clear Table");
+		        menuItemCopyList = new JMenuItem("Copy Table");
 		        menuItemClearList.addActionListener(new ActionListener() {
 		            @Override
 		            public void actionPerformed(ActionEvent e) 
@@ -483,31 +395,18 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 		        menuItemCopyList.addActionListener(new ActionListener() {
 		            @Override
 		            public void actionPerformed(ActionEvent e2) 
-		            {
-
-                        /*Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
-                        StringSelection contents = new StringSelection(hackerString);
-                        clipboard.setContents(contents, contents);*/
-		            	
-		            	//Clipboard Clipboard = new Clipboard (hackerString);
-		                // Copy URL to the clipboard
-		            	
+		            {    	
 		                StringSelection stringSelection = new StringSelection (hackerString);
 		                Clipboard clpbrd = Toolkit.getDefaultToolkit ().getSystemClipboard ();
 		                clpbrd.setContents (stringSelection, null);
                         JOptionPane.showMessageDialog(null, "Text Copied");
-                        //debug.println(hackerString); 
-		            	
 		            }
 		        });
-		        
-   
-		        
+
 		        
 		        TablePopupMenu.add(menuItemClearList); 
 		        TablePopupMenu.add(menuItemCopyList);
 		        
-
 		        
 		        table.setComponentPopupMenu(TablePopupMenu);
 		        
@@ -543,9 +442,7 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 		
 		//create a printwriter to print to the output window
 		this.debug = new PrintWriter(callbacks.getStdout(), true);
-		//this.debug.println("Hello");
-		
-		
+		//this.debug.println("Hello"); Saving for testing
             
             
         }
@@ -558,10 +455,6 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 		{
 			if(inScope && callbacks.isInScope(helpers.analyzeRequest(messageInfo).getUrl()))
 			{
-					//this.debug.println("Intercepted Request");
-					//if (this.callbacks.TOOL_REPEATER == toolFlag);
-					//{ 
-					//if(this.callbacks.TOOL_SPIDER == toolFlag) saving code for adding in spider functionality later.
 					scope(messageInfo);
 			}
 			else if(!inScope) 
@@ -602,41 +495,24 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 				
 					if(param.getType() == param.PARAM_URL)
 					{
-						//debug.print(param.getName()+"=");
-						//debug.println(param.getValue());
-						//debug.println(S); //adding in message info in the output window
-						
 						//condition to determine what user wants added to the table
 						if(GetParameters == true && GetValues == true)
 						{
 							model.addRow(new Object[]{param.getName(), param.getValue()});
-							//paramsCopyExport.add(new Object[]{param.getName(), param.getValue()});
-							//paramsCopyExport.addAll(param.getName(), param.getValue());
-							//paramHashTable.put(param.getName(), param.getValue());
 							ExportParamValues.add(List.of(param.getName(), param.getValue(), S, SResponse));
 							hackerString += param.getName() + "=" + param.getValue() + "\n";
-							//exportTextFile.add(List.of(param.getName(), param.getValue()));
-							
-							this.debug.println("firstConditionFire\n");
-							
 						}
 						else if(ParamCheckBox.isSelected() && !ValuesCheckBox.isSelected())
 						{
 							model.addRow(new Object[]{param.getName(), null});
-							//paramHashTable.put(param.getName(), null);
 							ExportParamValues.add(List.of(param.getName(), "", S, SResponse));
 							hackerString += param.getName() + "\n";
-							//exportTextFile.add(List.of(param.getName(), null));
-							this.debug.println("param\n");
 						}
 						else if(!ParamCheckBox.isSelected() && ValuesCheckBox.isSelected())
 						{
 							model.addRow(new Object[]{null, param.getValue()});
-							//paramHashTable.put(null, param.getValue());
 							ExportParamValues.add(List.of("", param.getValue(), S, SResponse));
 							hackerString += param.getValue() + "\n";
-							//exportTextFile.add(List.of(null, param.getValue()));
-							this.debug.println("Value\n"); // This string is to print out to the output window in burp. Trying to debug code and see if this runs when only the values checkbox is selected.
 						}
 
 
@@ -648,7 +524,6 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 
 					if(param.getType() == param.PARAM_URL)
 					{
-						//payloadParams.add(param.getValue().getBytes());
 						payloadParams.add(param.getValue());
 					}
 				} 
@@ -696,44 +571,7 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
         return this.callbacks; 
     }
 
-    //action listener methods
-    /*@Override
-    public void actionPerformed(ActionEvent event) 
-    {
-        JMenuItem menu = (JMenuItem) event.getSource();
-        int row = this.getSelectedRow();
-        // If no row is selected
-        if (row == -1)
-            return;
-        ReflectedEntry reflectedEntry = reflectedEntryList.get(row);
-        boolean useHttps = false;
-        if (reflectedEntry.url.getProtocol().toLowerCase().equals("https"))
-            useHttps = true;
-        if (menu == menuItemCopyList)
-        {
-            // Copy URL to the clipboard
-            StringSelection stringSelection = new StringSelection (reflectedEntry.url.toString());
-            Clipboard clpbrd = Toolkit.getDefaultToolkit ().getSystemClipboard ();
-            clpbrd.setContents (stringSelection, null);
-        }
- 
-        }
-        else (menu == menuItemClearList)
-        {
-            table.clear();
-            
-            //Reload the request table
-            ((AbstractTableModel)this.getModel()).fireTableDataChanged();
-            
-            // Clear the parameters table
-            ((ParametersTableModel)parametersTable.getModel()).reloadValues(new ReflectedEntry());
-            
-            // Clear request/response 
-            requestViewer.setMessage(new byte[0], true);
-            responseViewer.setMessage(new byte[0], false);
-        }
-    }*/
-
+   
     
     //Intruder Methods
 
@@ -795,73 +633,6 @@ public class BurpExtender extends JFrame implements IBurpExtender, IHttpListener
 	}
 	
 	
-	//Reference for adding export to text functionality: https://www.codegrepper.com/code-examples/java/save+list+string+to+file+java
-	
-	
 
-/*
-	@Override
-	public IHttpService getHttpService() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public byte[] getRequest() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	@Override
-	public byte[] getResponse() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-*/
 	
 }
-
-
-//adding class for generating the payloads.
-/*class IntruderPayloadGenerator implements IIntruderPayloadGenerator
-{
-    int payloadIndex;
- 
-    
-    @Override
-    public boolean hasMorePayloads()
-    {
-        //return payloadIndex < PAYLOADS.length;
-    	return payloadIndex < PAYLOADS.length;
-    }
-    @Override
-    public byte[] getNextPayload(byte[] baseValue)
-    {
-        byte[] payload = PAYLOADS[payloadIndex];
-        payloadIndex++;
-        return payload;
-    }
-    @Override
-    public void reset()
-    {
-        payloadIndex = 0;
-    }
-}*/
-
-
-/*//Define ActionListener
-class PopupActionListener implements ActionListener {
-public void actionPerformed(ActionEvent actionEvent) {
- //System.out.println("Selected: " + actionEvent.getActionCommand());
-    JMenuItem menu = (JMenuItem) actionEvent.getSource();
-    int row = this.getSelectedRow();
-    
-    if(menu == copyMenuItem)
-    {
-        // Copy URL to the clipboard
-        StringSelection stringSelection = new StringSelection (PopupActionListener.url.toString());
-        Clipboard clpbrd = Toolkit.getDefaultToolkit ().getSystemClipboard ();
-        clpbrd.setContents (stringSelection, null);
-    }
-	
-	
-}
-}*/
