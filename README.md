@@ -1,6 +1,6 @@
 paramLister is java extension that extracts parameters and values out of the URL and inserts them into a table. You can export or copy the table and use the values in a list for reviewing and content discovery tools.
 
-Note: The scope will need to be set at the beginning of the project for paramLister to take in parameters and values. 
+Note: The scope will need to be set at the beginning of the project for paramLister to take in parameters and values. Additionally, the export file functionality is still in proof of concept phase and you have to name the file as it is in the example. I plan to update this functionality in the second release.
 
 
 Installation Instructions:
